@@ -90,7 +90,7 @@ type dTree = DNil | DNode of string * dTree list
 
 let example = [
            ("a", ["f";"g"]); 
-           ("b", ["f";"h"]);
+		   ("b", ["f";"h"]);
            ("c", ["h";"i"]);
            ("f", ["j"; "g"]);
            ("g", ["j"]);
