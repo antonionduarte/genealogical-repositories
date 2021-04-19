@@ -1,8 +1,8 @@
 (* Genealogy module body *)
 
 (* 
-Aluno 1: ????? mandatory to fill
-Aluno 2: ????? mandatory to fill
+Aluno 1: Goncalo Virginia 56773 
+Aluno 2: Antonio Duarte 58278 
 
 Comment:
 
