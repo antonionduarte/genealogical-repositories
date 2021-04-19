@@ -89,7 +89,8 @@ type dTree = DNil | DNode of string * dTree list
 (* EXAMPLES - you can add more *)
 
 let example = [
-           ("a", ["f";"g"]); ("b", ["f";"h"]);
+           ("a", ["f";"g"]); 
+           ("b", ["f";"h"]);
            ("c", ["h";"i"]);
            ("f", ["j"; "g"]);
            ("g", ["j"]);
@@ -150,12 +151,15 @@ let rec height rep =
 
 (* FUNCTION makeATree *)
 
+
 let rec makeATree rep a =
 	match rep with
 	| [] -> ANode (a, ANil, ANil)
-	| x::xs -> ANode (a, makeATree pai1, makeATree pai2)
+	| x -> match parents rep [a] with
+		   | [] -> ANode (a, ANil, ANil) 
+		   | [p] -> ANode (a, makeATree rep p, ANil)
+		   | p1::p2::xs -> ANode (a, makeATree rep p1, makeATree rep p2)
 ;;
-
 
 (* FUNCTION repOfATree *)
 
