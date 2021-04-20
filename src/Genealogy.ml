@@ -151,14 +151,12 @@ let rec height rep =
 
 (* FUNCTION makeATree *)
 
-
 let rec makeATree rep a =
-	match rep with
+	match parents rep [a] with
 	| [] -> ANode (a, ANil, ANil)
-	| x -> match parents rep [a] with
-		   | [] -> ANode (a, ANil, ANil) 
-		   | [p] -> ANode (a, makeATree rep p, ANil)
-		   | p1::p2::xs -> ANode (a, makeATree rep p1, makeATree rep p2)
+	| [p] -> ANode (a, makeATree rep p, ANil)
+	| [p1; p2] -> ANode (a, makeATree rep p1, makeATree rep p2)
+	| _ -> failwith "ERROR: Child with two parents."
 ;;
 
 (* FUNCTION repOfATree *)
