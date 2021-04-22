@@ -90,7 +90,7 @@ type dTree = DNil | DNode of string * dTree list
 
 let example = [
            ("a", ["f";"g"]); 
-		   ("b", ["f";"h"]);
+		   		 ("b", ["f";"h"]);
            ("c", ["h";"i"]);
            ("f", ["j"; "g"]);
            ("g", ["j"]);
@@ -156,7 +156,7 @@ let rec makeATree rep a =
 	| [] -> ANode (a, ANil, ANil)
 	| [p] -> ANode (a, makeATree rep p, ANil)
 	| [p1; p2] -> ANode (a, makeATree rep p1, makeATree rep p2)
-	| _ -> failwith "ERROR: Child with two parents."
+	| _ -> failwith "ERROR: Has two parents."
 ;;
 
 (* FUNCTION repOfATree *)
@@ -183,11 +183,14 @@ let descendantsN rep n lst =
 	[]
 
 
-(* FUNCTION siblings *)
+(* FUNCTION siblings TODO: Apply cleanl to remove repetitions *)
 
-let siblings rep lst =
-	[]
-
+let rec siblings rep lst =
+	let sl = children rep (parents rep lst) in
+		match sl with 
+		| [] -> lst
+		| x -> sl
+;;
 
 (* FUNCTION siblingsInbreeding *)
 
