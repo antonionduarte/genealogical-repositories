@@ -167,11 +167,6 @@ let repOfATree t =
 
 (* FUNCTION makeDTree *)
 
-let dcons dt dl =
-	if dt = DNil then dl 
-	else dt::dl
-;;
-
 let rec makeDTree rep a =
 	match children rep [a] with
 	| [] -> DNode (a, [])
@@ -190,11 +185,15 @@ let repOfDTree t =
 
 (* FUNCTION descendantsN *)
 
-let descendantsN rep n lst =
-	[]
+let rec descendantsN rep n lst =
+	match lst with
+	| [] -> []
+	| [x] -> if n = 1 then children rep [x] else descendantsN rep (n - 1) (children rep [x])
+	| x::xs -> clean ((descendantsN rep n [x]) @ (descendantsN rep n xs))
+;;
 
 
-(* FUNCTION siblings TODO: Apply cleanl to remove repetitions *)
+(* FUNCTION siblings *)
 
 let siblings rep lst =
 	let sl = children rep (parents rep lst) in
