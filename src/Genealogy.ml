@@ -35,46 +35,59 @@ let rec uniq l =
 	| x::y::xs ->
 		if x = y then uniq (y::xs)
 		else x::uniq (y::xs)
+;;
 
 let clean l = (* removes repetitions *)
 	uniq (List.sort compare l)
+;;
 
 let len =
 	List.length
+;;
 
 let map =
 	List.map
+;;
 
 let filter =
 	List.filter
+;;
 
 let mem =
 	List.mem
+;;
 
 let flatMap f l =
 	List.flatten (map f l)
+;;
 
 let partition =
 	List.partition
+;;
 
 let exists =
 	List.exists
+;;
 
 let for_all =
 	List.for_all
+;;
 
 let cFlatMap f l =
 	clean (flatMap f l)
+;;
 
 let union l1 l2 =
 	clean (l1 @ l2)
+;;
 
 let inter l1 l2 =
 	filter (fun x -> mem x l2) l1
+;;
 
 let diff l1 l2 =
 	filter (fun a -> not (mem a l2)) l1
-
+;;
 
 
 (* TYPES *)
@@ -170,7 +183,7 @@ let rec parents rep l = (* get all the parents of the list l *)
 
 let rec height rep =
 	match rep with
-	| [] -> 0
+	| [] -> 1
 	| x::xs -> 1 + height (snd (cut xs))
 ;;
 
@@ -243,7 +256,6 @@ let rec descendantsN rep n lst =
 	| x::xs -> clean ((descendantsN rep n [x]) @ (descendantsN rep n xs))
 ;;
 
-
 (* FUNCTION siblings *)
 
 let siblings rep lst =
@@ -255,14 +267,20 @@ let siblings rep lst =
 
 (* FUNCTION siblingsInbreeding *)
 
-let siblingsInbreeding rep =
-    let to_check = diff (diff (leaves rep) (all1 rep)) (roots rep) in
-        let possible_ib = inter (siblings rep to_check) to_check in
-            match possible_ib with
-            | [] -> 
-            | x::xs -> 
+let rec checkSiblings rep lst =
+    match lst with
+    | [] -> []
+    | [x] -> []
+    | x::y::xs -> if (inter (children rep [x]) (children rep [y])) <> []
+                  then (x, y) :: checkSiblings rep xs
+                  else checkSiblings rep xs   
 ;;
-            
+
+let siblingsInbreeding rep =
+    let to_check = diff (diff (all1 rep) (leaves rep)) (roots rep) in
+        let possible_ib = inter (siblings rep to_check) to_check in
+            checkSiblings rep possible_ib
+;;
 
 (* FUNCTION waveN *)
 
@@ -276,7 +294,7 @@ let rec waveN rep n lst =
 (* FUNCTION supremum *)
 
 let supremum rep s =
-	[]
+[]
 
 (* FUNCTION validStructural *)
 
