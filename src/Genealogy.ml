@@ -113,7 +113,7 @@ let example2 = [
     ("k", []);
     ("m", ["k"; "n"]);
     ("n", [])
-    ]
+]
 
 
 (* BASIC REPOSITORY FUNCTIONS - you can add more *)
@@ -256,8 +256,13 @@ let siblings rep lst =
 (* FUNCTION siblingsInbreeding *)
 
 let siblingsInbreeding rep =
-	[]
-
+    let to_check = diff (diff (leaves rep) (all1 rep)) (roots rep) in
+        let possible_ib = inter (siblings rep to_check) to_check in
+            match possible_ib with
+            | [] -> 
+            | x::xs -> 
+;;
+            
 
 (* FUNCTION waveN *)
 
