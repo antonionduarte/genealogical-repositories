@@ -104,50 +104,59 @@ let example = [
 
 let size rep = (* number of individuals *)
 	len rep
+;;
 
 let all1 rep = (* all the individuals *)
 	map fst rep
+;;
 
 let all2 rep = (* all the children (of anyone) *)
 	cFlatMap snd rep
+;;
 
 let roots rep = (* individuals without any parents *)
 	diff (all1 rep) (all2 rep)
+;;
 
 let inners rep = (* individuals with children *)
 	let xs = filter (fun (p,cs) -> cs <> []) rep in
 		all1 xs
+;;
 
 let leaves rep = (* individuals without any children *)
 	let xs = filter (fun (p,cs) -> cs = []) rep in
 		all1 xs
+;;
 
 let cut1 rep l = (* partition based on first component of the repository *)
 	partition (fun (p,cs) -> mem p l) rep
+;;
 
 let cut2 rep l = (* partition based on second component of the repository *)
 	partition (fun (p,cs) -> inter cs l <> []) rep
-
+;;
+	
 let cut rep = (* partition -> (root pairs, rest pairs) *)
 	cut1 rep (roots rep)
+;;
 
 let children rep l = (* get all the children of the list l *)
 	let (a,b) = cut1 rep l in
 		all2 a
+;;
 
 let rec parents rep l = (* get all the parents of the list l *)
 	let (a,b) = cut2 rep l in
 		all1 a
-
+;;
 
 (* FUNCTION height *)
 
 let rec height rep =
 	match rep with
-	| [] -> 0 
-	| x::xs -> 1 + match cut xs with (_, cl) -> height cl
+	| [] -> 0
+	| x::xs -> 1 + height (snd (cut xs))
 ;;
-
 
 (* FUNCTION makeATree *)
 
@@ -226,6 +235,12 @@ let merge rep1 rep2 =
 (* FUNCTION supremum *)
 
 (* let supremum rep s = *)
+
+(* let supremum rep s = *) 
+(* 	match s with *)
+(* 	| [] -> *) 
+(* 	| x::xs -> x *)
+(* ;; *)
 	
 
 (* FUNCTION validStructural *)
