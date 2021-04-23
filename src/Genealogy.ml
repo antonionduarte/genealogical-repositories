@@ -228,20 +228,23 @@ let rec waveN rep n lst =
 
 (* FUNCTION merge *)
 
-let merge rep1 rep2 =
-	[]
+let rec mergeList rep1 rep2 ml = 
+	match ml with
+	| [] -> []
+	| x::xs -> (x, union (children rep1 [x]) (children rep2 [x])) :: mergeList rep1 rep2 xs
+;;
 
+let rec merge rep1 rep2 = 
+	mergeList rep1 rep2 (union (all1 rep1) (all1 rep2))
+;;
 
 (* FUNCTION supremum *)
 
-(* let supremum rep s = *)
-
-(* let supremum rep s = *) 
-(* 	match s with *)
-(* 	| [] -> *) 
-(* 	| x::xs -> x *)
-(* ;; *)
-	
+let supremum rep s =
+	match s with 
+	| [] -> []
+	| x::xs -> x 
+;;
 
 (* FUNCTION validStructural *)
 
