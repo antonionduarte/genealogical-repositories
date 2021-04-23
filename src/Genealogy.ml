@@ -99,6 +99,22 @@ let example = [
            ("j", [])
 ]											
 
+let example2 = [
+    ("a",["d";"e"]);
+    ("b",["e";"f"]);
+    ("c",["g";"h"]);
+    ("d",["i"]);
+    ("e", ["i";"j";"d"]);
+    ("f", ["g";"m"]);
+    ("g", ["h";"m"]);
+    ("h", ["n"]);
+    ("i", ["j"]);
+    ("j", ["k"]);
+    ("k", []);
+    ("m", ["k"; "n"]);
+    ("n", [])
+    ]
+
 
 (* BASIC REPOSITORY FUNCTIONS - you can add more *)
 
@@ -158,6 +174,18 @@ let rec height rep =
 	| x::xs -> 1 + height (snd (cut xs))
 ;;
 
+(* FUNCTION merge *)
+
+let rec mergeList rep1 rep2 ml = 
+	match ml with
+	| [] -> []
+	| x::xs -> (x, union (children rep1 [x]) (children rep2 [x])) :: mergeList rep1 rep2 xs
+;;
+
+let rec merge rep1 rep2 = 
+	mergeList rep1 rep2 (union (all1 rep1) (all1 rep2))
+;;
+
 (* FUNCTION makeATree *)
 
 let rec makeATree rep a =
@@ -188,8 +216,22 @@ and processChildren rep cl =
 
 (* FUNCTION repOfDTree *)
 
-let repOfDTree t =
-	[]
+let rec concatChildren tl = 
+	match tl with
+	| [] -> []
+	| DNil::_ -> []
+	| DNode (x, _) :: xs -> x :: concatChildren xs;  
+;;
+
+let rec repOfDTree t =
+	match t with
+	| DNil -> []
+	| DNode (x, y) -> (x, concatChildren y) :: (repChildren y)
+and repChildren cl = 
+	match cl with
+	| [] -> []
+	| dt::dts -> merge (repOfDTree dt) (repChildren dts)
+;;
 
 
 (* FUNCTION descendantsN *)
@@ -226,25 +268,10 @@ let rec waveN rep n lst =
 	| x -> waveN rep (n - 1) (union lst (union (parents rep lst) (children rep lst)))
 ;;
 
-(* FUNCTION merge *)
-
-let rec mergeList rep1 rep2 ml = 
-	match ml with
-	| [] -> []
-	| x::xs -> (x, union (children rep1 [x]) (children rep2 [x])) :: mergeList rep1 rep2 xs
-;;
-
-let rec merge rep1 rep2 = 
-	mergeList rep1 rep2 (union (all1 rep1) (all1 rep2))
-;;
-
 (* FUNCTION supremum *)
 
 let supremum rep s =
-	match s with 
-	| [] -> []
-	| x::xs -> x 
-;;
+	[]
 
 (* FUNCTION validStructural *)
 
