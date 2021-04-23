@@ -30,7 +30,7 @@ Comment:
 
 let rec uniq l =
 	match l with
-	|  [] -> []
+	| [] -> []
 	| [x] -> [x]
 	| x::y::xs ->
 		if x = y then uniq (y::xs)
@@ -200,7 +200,7 @@ let siblings rep lst =
 		match sl with 
 		| [] -> lst
 		| x -> sl
-;; 
+;;
 
 (* FUNCTION siblingsInbreeding *)
 
@@ -210,9 +210,12 @@ let siblingsInbreeding rep =
 
 (* FUNCTION waveN *)
 
-let waveN rep n lst =
-	[]
-
+let rec waveN rep n lst =
+	match n with
+	| 0 -> lst
+	| 1 -> waveN rep 0 (diff (union (parents rep lst) (children rep lst)) lst)
+	| x -> waveN rep (n - 1) (union lst (union (parents rep lst) (children rep lst)))
+;;
 
 (* FUNCTION merge *)
 
@@ -222,14 +225,13 @@ let merge rep1 rep2 =
 
 (* FUNCTION supremum *)
 
-let supremum rep s =
-	[]
-
+(* let supremum rep s = *)
+	
 
 (* FUNCTION validStructural *)
 
 let validStructural rep =
-	false
+ false
 
 
 (* FUNCTION validSemantic *)
