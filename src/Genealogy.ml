@@ -49,6 +49,10 @@ let map =
 	List.map
 ;;
 
+let find =
+    List.find
+;;
+
 let filter =
 	List.filter
 ;;
@@ -95,7 +99,16 @@ let diff l1 l2 =
 type item = string * string list
 type repository = item list
 
+(*
+Ancestors tree,
+A binary tree, which contains all the ancestors of a specific element.
+ *)
 type aTree = ANil | ANode of string * aTree * aTree
+
+(*
+Descendants tree,
+A N-Nary tree, which contains all the descendants of a specific element. 
+*)
 type dTree = DNil | DNode of string * dTree list
 
 
@@ -128,8 +141,58 @@ let example2 = [
     ("n", [])
 ]
 
+let ultimateexample = [
+        ("a",["g";"h"]);
+        ("b",["h";"i"]);
+        ("c",["i";"j";"k"]);
+        ("d",["k";"l"]);
+        ("e",["l";"m"]);
+        ("f",["m";"n"]);
+        ("g",["o";"p"]);
+        ("h",["q";"r"]);
+        ("i",["s";"t"]);
+        ("j",["u"]);
+        ("k",["v";"w"]);
+        ("l",["x";"y"]);
+        ("m",["y";"z"]);
+        ("n",["z"]);
+        ("o",["p";"2";"1"]);
+        ("p",["q";"2"]);
+        ("q",["3"]);
+        ("r",["4";"5"]);
+        ("s",["r";"6";"t";"4"]);
+        ("t",["6";"u"]);
+        ("u",["v";"8"]);
+        ("v",[]);
+        ("w",["9";"19"]);
+        ("x",["10"]);
+        ("y",["11";"x"]);
+        ("z",["11"]);
+        ("1",["12";"13"]);
+        ("2",["1";"12";"13"]);
+        ("3",["15"]);
+        ("4",["3";"5";"16"]);
+        ("5",["17"]);
+        ("6",["7";"17"]);
+        ("7",["18"]);
+        ("8",["7";"19"]);
+        ("9",["20"]);
+        ("10",["9";"21"]);
+        ("11",["10";"21"]);
+        ("12",["14"]);
+        ("13",["14"]);
+        ("14",["15"]);
+        ("15",["16"]);
+        ("16",[]);
+        ("17",[]);
+        ("18",[]);
+        ("19",["18";"20"]);
+        ("20",["22"]);
+        ("21",["22"]);
+        ("22",[]);
+]
 
-(* BASIC REPOSITORY FUNCTIONS - you can add more *)
+(* Basic repository functions - you can add more *)
 
 let size rep = (* number of individuals *)
 	len rep
@@ -179,12 +242,35 @@ let rec parents rep l = (* get all the parents of the list l *)
 		all1 a
 ;;
 
+let rec aTreeToList t = (* converts an atree to a list *)
+	match t with
+		| ANil -> []
+		| ANode (x, p1, p2) -> (x::aTreeToList p1) @ (aTreeToList p2)
+;;
+
+let rec distToRoots rep elem = (* determines the distance between an elem and the roots *)
+    if mem elem (roots rep) then 0
+    else 1 + distToRoots (snd (cut rep)) elem
+;;
+
+let rec maxDistRoots rep lst = (* returns max distance to roots of elems in list *)
+    match lst with
+    | [] -> failwith "ERROR: List is empty"
+    | [x] -> distToRoots rep x 
+    | x::xs -> let mxs = maxDistRoots rep xs in
+                    let dx = distToRoots rep x in
+                        if dx >= mxs then dx
+                        else mxs
+;;
+
+(* Primary Functions *)
+
 (* FUNCTION height *)
 
 let rec height rep =
 	match rep with
-	| [] -> 1
-	| x::xs -> 1 + height (snd (cut xs))
+	| [] -> 0
+	| x -> 1 + height (snd (cut x))
 ;;
 
 (* FUNCTION merge *)
@@ -288,13 +374,32 @@ let rec waveN rep n lst =
 	match n with
 	| 0 -> lst
 	| 1 -> waveN rep 0 (diff (union (parents rep lst) (children rep lst)) lst)
-	| x -> waveN rep (n - 1) (union lst (union (parents rep lst) (children rep lst)))
-;;
+	| x -> waveN rep (n - 1) (union lst (union (parents rep lst) (children rep lst));;
 
 (* FUNCTION supremum *)
 
-let supremum rep s =
-[]
+let rec getAncestors rep elem =
+    clean (aTreeToList (makeATree rep elem))
+;;
+
+let rec sharedAncestors rep lst = 
+    match lst with
+    | [] -> []
+    | [x] -> getAncestors rep x 
+    | x::y::xs -> inter (getAncestors rep x) (sharedAncestors rep (y::xs)) 
+;;
+
+let rec elemsAtDist rep lst dist =
+    match lst with
+    | [] -> []
+    | x::xs -> if (distToRoots rep x) = dist then x :: elemsAtDist rep xs dist
+               else elemsAtDist rep xs dist
+;;
+
+let supremum rep s = 
+    let sa = sharedAncestors rep s in
+        elemsAtDist rep sa (maxDistRoots rep sa)
+;; 
 
 (* FUNCTION validStructural *)
 
