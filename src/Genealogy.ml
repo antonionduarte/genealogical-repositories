@@ -21,12 +21,12 @@ Comment:
 *)
 
 
-(* COMPILATION - How to build this module (used by Mooshak))
+(* Compilation - How to build this module (used by Mooshak))
          ocamlc -c Genealogy.mli Genealogy.ml
 *)
 
 
-(* AUXILIARY BASIC FUNCTIONS - you can add more *)
+(* Auxiliary Basic Functions - you can add more *)
 
 let rec uniq l =
 	match l with
@@ -112,7 +112,7 @@ A N-Nary tree, which contains all the descendants of a specific element.
 type dTree = DNil | DNode of string * dTree list
 
 
-(* EXAMPLES - you can add more *)
+(* Example Repositories - you can add more *)
 
 let example = [
     ("a", ["f";"g"]); 
@@ -157,54 +157,54 @@ let example3 = [
 ]
 
 let ultimateexample = [
-        ("a",["g";"h"]);
-        ("b",["h";"i"]);
-        ("c",["i";"j";"k"]);
-        ("d",["k";"l"]);
-        ("e",["l";"m"]);
-        ("f",["m";"n"]);
-        ("g",["o";"p"]);
-        ("h",["q";"r"]);
-        ("i",["s";"t"]);
-        ("j",["u"]);
-        ("k",["v";"w"]);
-        ("l",["x";"y"]);
-        ("m",["y";"z"]);
-        ("n",["z"]);
-        ("o",["p";"2";"1"]);
-        ("p",["q";"2"]);
-        ("q",["3"]);
-        ("r",["4";"5"]);
-        ("s",["r";"6";"t";"4"]);
-        ("t",["6";"u"]);
-        ("u",["v";"8"]);
-        ("v",[]);
-        ("w",["9";"19"]);
-        ("x",["10"]);
-        ("y",["11";"x"]);
-        ("z",["11"]);
-        ("1",["12";"13"]);
-        ("2",["1";"12";"13"]);
-        ("3",["15"]);
-        ("4",["3";"5";"16"]);
-        ("5",["17"]);
-        ("6",["7";"17"]);
-        ("7",["18"]);
-        ("8",["7";"19"]);
-        ("9",["20"]);
-        ("10",["9";"21"]);
-        ("11",["10";"21"]);
-        ("12",["14"]);
-        ("13",["14"]);
-        ("14",["15"]);
-        ("15",["16"]);
-        ("16",[]);
-        ("17",[]);
-        ("18",[]);
-        ("19",["18";"20"]);
-        ("20",["22"]);
-        ("21",["22"]);
-        ("22",[]);
+		("a",["g";"h"]);
+		("b",["h";"i"]);
+		("c",["i";"j";"k"]);
+		("d",["k";"l"]);
+		("e",["l";"m"]);
+		("f",["m";"n"]);
+		("g",["o";"p"]);
+		("h",["q";"r"]);
+		("i",["s";"t"]);
+		("j",["u"]);
+		("k",["v";"w"]);
+		("l",["x";"y"]);
+		("m",["y";"z"]);
+		("n",["z"]);
+		("o",["p";"2";"1"]);
+		("p",["q";"2"]);
+		("q",["3"]);
+		("r",["4";"5"]);
+		("s",["r";"6";"t";"4"]);
+		("t",["6";"u"]);
+		("u",["v";"8"]);
+		("v",[]);
+		("w",["9";"19"]);
+		("x",["10"]);
+		("y",["11";"x"]);
+		("z",["11"]);
+		("1",["12";"13"]);
+		("2",["1";"12";"13"]);
+		("3",["15"]);
+		("4",["3";"5";"16"]);
+		("5",["17"]);
+		("6",["7";"17"]);
+		("7",["18"]);
+		("8",["7";"19"]);
+		("9",["20"]);
+		("10",["9";"21"]);
+		("11",["10";"21"]);
+		("12",["14"]);
+		("13",["14"]);
+		("14",["15"]);
+		("15",["16"]);
+		("16",[]);
+		("17",[]);
+		("18",[]);
+		("19",["18";"20"]);
+		("20",["22"]);
+		("21",["22"]);
+		("22",[]);
 ]
 
 (* Basic repository functions - you can add more *)
@@ -264,18 +264,18 @@ let rec aTreeToList t = (* converts an atree to a list *)
 ;;
 
 let rec distToRoots rep elem = (* determines the distance between an elem and the roots *)
-    if mem elem (roots rep) then 0
-    else 1 + distToRoots (snd (cut rep)) elem
+	if mem elem (roots rep) then 0
+	else 1 + distToRoots (snd (cut rep)) elem
 ;;
 
 let rec maxDistRoots rep lst = (* returns max distance to roots of elems in list *)
-    match lst with
-    | [] -> failwith "ERROR: List is empty"
-    | [x] -> distToRoots rep x 
-    | x::xs -> let mxs = maxDistRoots rep xs in
-                    let dx = distToRoots rep x in
-                        if dx >= mxs then dx
-                        else mxs
+	match lst with
+	| [] -> failwith "ERROR: List is empty"
+	| [x] -> distToRoots rep x 
+	| x::xs -> let mxs = maxDistRoots rep xs in
+									let dx = distToRoots rep x in
+											if dx >= mxs then dx
+											else mxs
 ;;
 
 (* Primary Functions *)
@@ -376,22 +376,37 @@ let siblings rep lst =
 
 (* FUNCTION siblingsInbreeding *)
 
-let rec checkSiblings rep lst =
-    match lst with
-    | [] -> []
-    | [x] -> []
-    | x::y::xs -> if (inter (children rep [x]) (children rep [y])) <> []
-                  then (x, y) :: checkSiblings rep xs
-                  else checkSiblings rep xs   
+let rec cleanTuples lst =
+	match lst with
+	| [] -> []
+	| (x, y)::xs -> if mem (y, x) xs then cleanTuples xs
+									else (x, y) :: (cleanTuples xs)
 ;;
 
-(* let generatePairs rep possible_ib = *) 
-(*     match *)
-(* ;; *)
+let rec joinPairs rep sib elem = 
+	match sib with
+	| [] -> []
+	| x::xs -> if x = elem then joinPairs rep xs elem
+						 else (elem, x) :: (joinPairs rep xs elem)
+;;
+
+let rec generatePairs rep possible_ib =
+	match possible_ib with
+	| [] -> []
+	| x::xs -> (joinPairs rep (siblings rep [x]) x) @ (generatePairs rep xs)
+;;
+
+let rec verifyIfBreeding rep pairs = 
+	match pairs with
+	| [] -> []
+	| (x, y)::xs -> if (inter (children rep [x]) (children rep [y])) <> []
+								  then (x, y) :: verifyIfBreeding rep xs
+									else verifyIfBreeding rep xs
+;;
 
 let siblingsInbreeding rep =
-    let possible_ib = diff (all1 rep) (leaves rep) in
-        checkSiblings rep possible_ib
+	let possible_ib = diff (diff (all1 rep) (leaves rep)) (roots rep) in
+		verifyIfBreeding rep (cleanTuples (generatePairs rep possible_ib))
 ;;
 
 (* FUNCTION waveN *)
@@ -405,26 +420,26 @@ let rec waveN rep n lst =
 (* FUNCTION supremum *)
 
 let rec getAncestors rep elem =
-    clean (aTreeToList (makeATree rep elem))
+	clean (aTreeToList (makeATree rep elem))
 ;;
 
 let rec sharedAncestors rep lst = 
-    match lst with
-    | [] -> []
-    | [x] -> getAncestors rep x 
-    | x::y::xs -> inter (getAncestors rep x) (sharedAncestors rep (y::xs)) 
+	match lst with
+	| [] -> []
+	| [x] -> getAncestors rep x 
+	| x::y::xs -> inter (getAncestors rep x) (sharedAncestors rep (y::xs)) 
 ;;
 
 let rec elemsAtDist rep lst dist =
-    match lst with
-    | [] -> []
-    | x::xs -> if (distToRoots rep x) = dist then x :: elemsAtDist rep xs dist
-               else elemsAtDist rep xs dist
+	match lst with
+	| [] -> []
+	| x::xs -> if (distToRoots rep x) = dist then x :: elemsAtDist rep xs dist
+						 else elemsAtDist rep xs dist
 ;;
 
 let supremum rep s = 
-    let sa = sharedAncestors rep s in
-        elemsAtDist rep sa (maxDistRoots rep sa)
+	let sa = sharedAncestors rep s in
+		elemsAtDist rep sa (maxDistRoots rep sa)
 ;; 
 
 (* FUNCTION validStructural *)
