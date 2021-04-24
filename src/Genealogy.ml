@@ -111,7 +111,7 @@ type dTree = DNil | DNode of string * dTree list
 (* Example Repositories - you can add more *)
 
 let example = [
-    ("a", ["f";"g"]); 
+		("a", ["f";"g"]); 
 		("b", ["f";"h"]);
    	("c", ["h";"i"]);
    	("f", ["j"; "g"]);
@@ -203,6 +203,38 @@ let ultimateexample = [
 		("22",[]);
 ]
 
+let example5 = [
+    ("o",[]);
+    ("a",["d";"e"]);
+    ("d",["i"]);
+    ("e",["d";"i"]);
+    ("i",["l";"o"]);
+    ("l",["a"]);
+]    
+
+let example4 = [
+    ("a",["d";"e"]);
+    ("b",["e";"f"]);
+    ("c",["g";"h"]);
+    ("d",["i"]);
+    ("e", ["i";"j";"d"]);
+    ("loop trigger", []);
+    ("f", ["g";"m";"loop trigger"]);
+    ("g", ["h";"m"]);
+    ("h", ["n"]);
+    ("i", ["j"]);
+    ("j", ["k"]);
+    ("k", ["f"]);
+    ("m", ["k"; "n"]);
+    ("n", [])
+]
+
+let example6 = [
+    ("g",[]);
+    ("a",["f";"g"]);
+    ("f",["a"])
+]
+
 (* Basic repository functions - you can add more *)
 
 let size rep = (* number of individuals *)
@@ -276,7 +308,7 @@ let rec maxDistRoots rep lst = (* returns max distance to roots of elems in list
 
 (* Primary Functions *)
 
-(* FUNCTION height *)
+(* Function height *)
 
 let rec height rep =
 	match rep with
@@ -284,7 +316,7 @@ let rec height rep =
 	| x -> 1 + height (snd (cut x))
 ;;
 
-(* FUNCTION merge *)
+(* Function merge *)
 
 let rec mergeList rep1 rep2 ml = 
 	match ml with
@@ -296,7 +328,7 @@ let rec merge rep1 rep2 =
 	mergeList rep1 rep2 (union (all1 rep1) (all1 rep2))
 ;;
 
-(* FUNCTION makeATree *)
+(* Function makeATree *)
 
 let rec makeATree rep a =
 	match parents rep [a] with
@@ -306,7 +338,7 @@ let rec makeATree rep a =
 	| _ -> failwith "ERROR: Node has more than two parents."
 ;;
 
-(* FUNCTION repOfATree *)
+(* Function repOfATree *)
 
 let rec repOfATree t =
 	match t with
@@ -320,7 +352,7 @@ let rec repOfATree t =
 					merge ([(c, []); (n1, [c]); (n2, [c])]) (merge (repOfATree p1) (repOfATree p2))
 ;;
 
-(* FUNCTION makeDTree *)
+(* Function makeDTree *)
 
 let rec makeDTree rep a =
 	match children rep [a] with
@@ -332,7 +364,7 @@ and processChildren rep cl =
 	| y::ys -> (makeDTree rep y) :: (processChildren rep ys)
 ;;
 
-(* FUNCTION repOfDTree *)
+(* Function repOfDTree *)
 
 let rec concatChildren tl = 
 	match tl with
@@ -352,7 +384,7 @@ and repChildren cl =
 ;;
 
 
-(* FUNCTION descendantsN *)
+(* Function descendantsN *)
 
 let rec descendantsN rep n lst =
 	match lst with
@@ -361,14 +393,14 @@ let rec descendantsN rep n lst =
 	| x::xs -> clean ((descendantsN rep n [x]) @ (descendantsN rep n xs))
 ;;
 
-(* FUNCTION siblings *)
+(* Function siblings *)
 
 let siblings rep lst =
 	let sl = children rep (parents rep lst) in
 		union lst sl	
 ;;
 
-(* FUNCTION siblingsInbreeding *)
+(* Function siblingsInbreeding *)
 
 let rec cleanTuples lst =
 	match lst with
@@ -403,7 +435,7 @@ let siblingsInbreeding rep =
 		verifyIfBreeding rep (cleanTuples (generatePairs rep possible_ib))
 ;;
 
-(* FUNCTION waveN *)
+(* Function waveN *)
 
 let rec waveN rep n lst =
 	match n with
@@ -411,7 +443,7 @@ let rec waveN rep n lst =
 	| 1 -> waveN rep 0 (diff (union (parents rep lst) (children rep lst)) lst)
 	| x -> waveN rep (n - 1) (union lst (union (parents rep lst) (children rep lst)));;
 
-(* FUNCTION supremum *)
+(* Function supremum *)
 
 let rec getAncestors rep elem =
 	diff (clean (aTreeToList (makeATree rep elem))) [elem]
@@ -436,16 +468,18 @@ let supremum rep s =
 		elemsAtDist rep sa (maxDistRoots rep sa)
 ;; 
 
-(* FUNCTION validStructural *)
+(* Function validStructural *)
 
-let validStructural rep =
-	rep = clean (map (fun (x, _) -> x) rep) && all1 rep = all2 rep
-;;
+(* let validStructural rep = *)
+(* 	rep = clean (map (fun (x, _) -> x) rep) && all1 rep = all2 rep *)
+(* ;; *)
 
-(* FUNCTION validSemantic *)
+(* Function validSemantic *)
 
 let rec validSemantic rep =
 	match rep with
 	| [] -> true
-	| x::xs -> if find (fst x) (getAncestors rep (fst x)) || length parents (fst x) > 2 then false else validSemantic xs
-;;
+	| x::xs -> if mem (fst x) (getAncestors rep (fst x)) || (len (parents rep [(fst x)])) > 2 
+						 then false 
+						 else validSemantic xs
+;
