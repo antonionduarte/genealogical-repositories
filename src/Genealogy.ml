@@ -49,10 +49,6 @@ let map =
 	List.map
 ;;
 
-let find =
-    List.find
-;;
-
 let filter =
 	List.filter
 ;;
@@ -94,20 +90,20 @@ let diff l1 l2 =
 ;;
 
 
-(* TYPES *)
+(* Types *)
 
 type item = string * string list
 type repository = item list
 
 (*
-Ancestors tree,
-A binary tree, which contains all the ancestors of a specific element.
+	Ancestors tree,
+	A binary tree, which contains all the ancestors of a specific element.
  *)
 type aTree = ANil | ANode of string * aTree * aTree
 
 (*
-Descendants tree,
-A N-Nary tree, which contains all the descendants of a specific element. 
+	Descendants tree,
+	A N-Nary tree, which contains all the descendants of a specific element. 
 *)
 type dTree = DNil | DNode of string * dTree list
 
@@ -369,9 +365,7 @@ let rec descendantsN rep n lst =
 
 let siblings rep lst =
 	let sl = children rep (parents rep lst) in
-		match sl with 
-		| [] -> lst
-		| x -> sl
+		union lst sl	
 ;;
 
 (* FUNCTION siblingsInbreeding *)
@@ -455,4 +449,3 @@ let validSemantic rep =
 	| [] -> true
 	| x:xs -> if find (fst x) (snd x) || length parents (fst x) > 2 then false else validSemantic xs
 ;;
-
