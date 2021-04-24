@@ -430,12 +430,14 @@ let supremum rep s =
 (* FUNCTION validStructural *)
 
 let validStructural rep =
- false
-
+	rep = clean map (fun (x, _) -> x) rep && all1 rep = all2 rep
+;;
 
 (* FUNCTION validSemantic *)
 
 let validSemantic rep =
-	false
-
+	match rep with
+	| [] -> true
+	| x:xs -> if find (fst x) (snd x) || length parents (fst x) > 2 then false else validSemantic xs
+;;
 
