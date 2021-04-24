@@ -115,14 +115,14 @@ type dTree = DNil | DNode of string * dTree list
 (* EXAMPLES - you can add more *)
 
 let example = [
-           ("a", ["f";"g"]); 
-		   		 ("b", ["f";"h"]);
-           ("c", ["h";"i"]);
-           ("f", ["j"; "g"]);
-           ("g", ["j"]);
-           ("h", []);
-           ("i", []);
-           ("j", [])
+    ("a", ["f";"g"]); 
+	("b", ["f";"h"]);
+   	("c", ["h";"i"]);
+   	("f", ["j"; "g"]);
+  	("g", ["j"]);
+   	("h", []);
+   	("i", []);
+    ("j", [])
 ]											
 
 let example2 = [
@@ -307,14 +307,22 @@ let rec makeATree rep a =
 	| [] -> ANode (a, ANil, ANil)
 	| [p] -> ANode (a, makeATree rep p, ANil)
 	| [p1; p2] -> ANode (a, makeATree rep p1, makeATree rep p2)
-	| _ -> failwith "ERROR: Has two parents."
+	| _ -> failwith "ERROR: Node has more than two parents."
 ;;
 
 (* FUNCTION repOfATree *)
 
-let repOfATree t =
-	[]
+let makeItem p c = 
+	match p with
+	| ANil -> ()
+	| ANode (n, _, _) -> (n, [c])
+;;
 
+let rec repOfATree t =
+	match t with
+	| ANil -> []
+	| ANode (c, p1, p2) -> (makeItem p1 c) :: (makeItem p2 c) :: merge (repOfATree p1) (repOfATree p2)
+;;
 
 (* FUNCTION makeDTree *)
 
@@ -334,7 +342,7 @@ let rec concatChildren tl =
 	match tl with
 	| [] -> []
 	| DNil::_ -> []
-	| DNode (x, _) :: xs -> x :: concatChildren xs;  
+	| DNode (x, _) :: xs -> x :: concatChildren xs 
 ;;
 
 let rec repOfDTree t =
