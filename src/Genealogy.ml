@@ -141,6 +141,21 @@ let example2 = [
     ("n", [])
 ]
 
+let example3 = [
+    ("a", ["e"]);
+    ("b", ["e"; "f"]);
+    ("c", ["f"; "g"]);
+    ("d", ["g"; "m"]);
+    ("e", ["j"; "h"]);
+    ("f", []);
+    ("g", ["i"; "l"]);
+    ("m", ["l"]);
+    ("j", []);
+    ("h", []);
+    ("i", []);
+    ("l", [])
+]
+
 let ultimateexample = [
         ("a",["g";"h"]);
         ("b",["h";"i"]);
@@ -362,10 +377,13 @@ let rec checkSiblings rep lst =
                   else checkSiblings rep xs   
 ;;
 
+let generatePairs rep possible_ib = 
+    match
+;;
+
 let siblingsInbreeding rep =
-    let to_check = diff (diff (all1 rep) (leaves rep)) (roots rep) in
-        let possible_ib = inter (siblings rep to_check) to_check in
-            checkSiblings rep possible_ib
+    let possible_ib = diff (all1 rep) (leaves rep) in
+        checkSiblings rep possible_ib
 ;;
 
 (* FUNCTION waveN *)
@@ -374,7 +392,7 @@ let rec waveN rep n lst =
 	match n with
 	| 0 -> lst
 	| 1 -> waveN rep 0 (diff (union (parents rep lst) (children rep lst)) lst)
-	| x -> waveN rep (n - 1) (union lst (union (parents rep lst) (children rep lst));;
+	| x -> waveN rep (n - 1) (union lst (union (parents rep lst) (children rep lst)));;
 
 (* FUNCTION supremum *)
 
