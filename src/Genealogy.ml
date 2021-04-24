@@ -439,13 +439,13 @@ let supremum rep s =
 (* FUNCTION validStructural *)
 
 let validStructural rep =
-	rep = clean map (fun (x, _) -> x) rep && all1 rep = all2 rep
+	rep = clean (map (fun (x, _) -> x) rep) && all1 rep = all2 rep
 ;;
 
 (* FUNCTION validSemantic *)
 
-let validSemantic rep =
+let rec validSemantic rep =
 	match rep with
 	| [] -> true
-	| x:xs -> if find (fst x) (snd x) || length parents (fst x) > 2 then false else validSemantic xs
+	| x::xs -> if find (fst x) (getAncestors rep (fst x)) || length parents (fst x) > 2 then false else validSemantic xs
 ;;
