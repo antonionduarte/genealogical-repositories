@@ -116,7 +116,7 @@ type dTree = DNil | DNode of string * dTree list
 
 let example = [
     ("a", ["f";"g"]); 
-	("b", ["f";"h"]);
+		("b", ["f";"h"]);
    	("c", ["h";"i"]);
    	("f", ["j"; "g"]);
   	("g", ["j"]);
@@ -270,7 +270,7 @@ let rec distToRoots rep elem = (* determines the distance between an elem and th
 
 let rec maxDistRoots rep lst = (* returns max distance to roots of elems in list *)
 	match lst with
-	| [] -> failwith "ERROR: List is empty"
+	| [] -> 0
 	| [x] -> distToRoots rep x 
 	| x::xs -> let mxs = maxDistRoots rep xs in
 									let dx = distToRoots rep x in
