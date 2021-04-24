@@ -420,7 +420,7 @@ let rec waveN rep n lst =
 (* FUNCTION supremum *)
 
 let rec getAncestors rep elem =
-	clean (aTreeToList (makeATree rep elem))
+	diff (clean (aTreeToList (makeATree rep elem))) [elem]
 ;;
 
 let rec sharedAncestors rep lst = 
