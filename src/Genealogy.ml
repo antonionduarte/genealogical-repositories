@@ -312,16 +312,16 @@ let rec makeATree rep a =
 
 (* FUNCTION repOfATree *)
 
-let makeItem p c = 
-	match p with
-	| ANil -> ()
-	| ANode (n, _, _) -> (n, [c])
-;;
-
 let rec repOfATree t =
 	match t with
 	| ANil -> []
-	| ANode (c, p1, p2) -> (makeItem p1 c) :: (makeItem p2 c) :: merge (repOfATree p1) (repOfATree p2)
+	| ANode (c, p1, p2) -> 
+			match p1, p2 with
+			| ANil, ANil -> [(c, [])]
+			| ANode (n, _, _), ANil -> merge [(c, []); (n, [c])] (repOfATree p1)
+			| ANil, ANode (n, _, _) -> merge [(c, []); (n, [c])] (repOfATree p2)
+			| ANode (n1, _, _), ANode (n2, _, _) -> 
+					merge ([(c, []); (n1, [c]); (n2, [c])]) (merge (repOfATree p1) (repOfATree p2))
 ;;
 
 (* FUNCTION makeDTree *)
@@ -385,9 +385,9 @@ let rec checkSiblings rep lst =
                   else checkSiblings rep xs   
 ;;
 
-let generatePairs rep possible_ib = 
-    match
-;;
+(* let generatePairs rep possible_ib = *) 
+(*     match *)
+(* ;; *)
 
 let siblingsInbreeding rep =
     let possible_ib = diff (all1 rep) (leaves rep) in
