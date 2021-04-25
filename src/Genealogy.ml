@@ -484,14 +484,17 @@ let validStructural rep =
 
 (* Function validSemantic *)
 
-(* let validSemantic rep = *)
-(* 	let all_elems = all1 rep in *) 
-		
+let rec checkLoop elem curr rep = 
+	match curr with
+	| [] -> true
+	| x::xs -> let ps = parents rep [x] in
+					if mem elem ps then false
+					else checkLoop elem ps rep && checkLoop elem xs rep
 
-(* let rec validSemantic rep = *)
-(* 	match rep with *)
-(* 	| [] -> true *)
-(* 	| x::xs -> if mem (fst x) (getAncestors rep (fst x)) || (len (parents rep [(fst x)])) > 2 *) 
-(* 						 then false *) 
-(* 						 else validSemantic xs *)
-(* ; *)
+let rec toCheck elems rep =
+	match elems with
+	| [] -> true
+	| x::xs -> if (not (checkLoop (fst x) [(fst x)] rep)) || len (parents rep [fst x]) > 2 then false
+				else toCheck xs rep
+
+let rec validSemantic rep = toCheck rep rep;;
