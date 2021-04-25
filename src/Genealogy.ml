@@ -308,7 +308,7 @@ let rec maxDistRoots rep lst = (* returns max distance to roots of elems in list
 
 (* Primary Functions *)
 
-(* Function height *)
+(* Function - height *)
 
 let rec height rep =
 	match rep with
@@ -316,7 +316,7 @@ let rec height rep =
 	| x -> 1 + height (snd (cut x))
 ;;
 
-(* Function merge *)
+(* Function - merge *)
 
 let rec mergeList rep1 rep2 ml = 
 	match ml with
@@ -328,7 +328,7 @@ let rec merge rep1 rep2 =
 	mergeList rep1 rep2 (union (all1 rep1) (all1 rep2))
 ;;
 
-(* Function makeATree *)
+(* Function - makeATree *)
 
 let rec makeATree rep a =
 	match parents rep [a] with
@@ -338,7 +338,7 @@ let rec makeATree rep a =
 	| _ -> failwith "ERROR: Node has more than two parents."
 ;;
 
-(* Function repOfATree *)
+(* Function - repOfATree *)
 
 let rec repOfATree t =
 	match t with
@@ -352,7 +352,7 @@ let rec repOfATree t =
 					merge ([(c, []); (n1, [c]); (n2, [c])]) (merge (repOfATree p1) (repOfATree p2))
 ;;
 
-(* Function makeDTree *)
+(* Function - makeDTree *)
 
 let rec makeDTree rep a =
 	match children rep [a] with
@@ -364,7 +364,7 @@ and processChildren rep cl =
 	| y::ys -> (makeDTree rep y) :: (processChildren rep ys)
 ;;
 
-(* Function repOfDTree *)
+(* Function - repOfDTree *)
 
 let rec concatChildren tl = 
 	match tl with
@@ -383,24 +383,21 @@ and repChildren cl =
 	| dt::dts -> merge (repOfDTree dt) (repChildren dts)
 ;;
 
-
-(* Function descendantsN *)
+(* Function - descendantsN *)
 
 let rec descendantsN rep n lst =
-	match lst with
-	| [] -> []
-	| [x] -> if n = 1 then children rep [x] else descendantsN rep (n - 1) (children rep [x])
-	| x::xs -> clean ((descendantsN rep n [x]) @ (descendantsN rep n xs))
+	if n = 0 then lst
+	else descendantsN rep (n - 1) (children rep lst)
 ;;
 
-(* Function siblings *)
+(* Function - siblings *)
 
 let siblings rep lst =
 	let sl = children rep (parents rep lst) in
 		union lst sl	
 ;;
 
-(* Function siblingsInbreeding *)
+(* Function - siblingsInbreeding *)
 
 let rec cleanTuples lst =
 	match lst with
@@ -431,19 +428,20 @@ let rec verifyIfBreeding rep pairs =
 ;;
 
 let siblingsInbreeding rep =
-	let possible_ib = diff (diff (all1 rep) (leaves rep)) (roots rep) in
+	let possible_ib = diff (inners rep) (roots rep) in
 		verifyIfBreeding rep (cleanTuples (generatePairs rep possible_ib))
 ;;
 
-(* Function waveN *)
+(* Function - waveN *)
 
 let rec waveN rep n lst =
 	match n with
 	| 0 -> lst
 	| 1 -> waveN rep 0 (diff (union (parents rep lst) (children rep lst)) lst)
-	| x -> waveN rep (n - 1) (union lst (union (parents rep lst) (children rep lst)));;
+	| x -> waveN rep (n - 1) (union lst (union (parents rep lst) (children rep lst)))
+;;
 
-(* Function supremum *)
+(* Function - supremum *)
 
 let rec getAncestors rep elem =
 	diff (clean (aTreeToList (makeATree rep elem))) [elem]
@@ -457,10 +455,7 @@ let rec sharedAncestors rep lst =
 ;;
 
 let rec elemsAtDist rep lst dist =
-	match lst with
-	| [] -> []
-	| x::xs -> if (distToRoots rep x) = dist then x :: elemsAtDist rep xs dist
-						 else elemsAtDist rep xs dist
+	filter (fun x -> (distToRoots rep x) = dist) lst
 ;;
 
 let supremum rep s = 
@@ -470,9 +465,22 @@ let supremum rep s =
 
 (* Function validStructural *)
 
-(* let validStructural rep = *)
-(* 	rep = clean (map (fun (x, _) -> x) rep) && all1 rep = all2 rep *)
-(* ;; *)
+let rec noDuplicates lst =
+	match lst with 
+	| [] -> true
+	| x::xs -> (not (mem x xs)) && noDuplicates xs
+;;
+
+let rec occursInFirst all lst =
+	match lst with
+	| [] -> true
+	| x::xs -> (mem x (all)) && occursInFirst all xs
+;;
+
+let validStructural rep = 
+	let all_elems = all1 rep in
+		(noDuplicates (all_elems)) && (occursInFirst (all_elems) (all2 rep))
+;; 
 
 (* Function validSemantic *)
 
