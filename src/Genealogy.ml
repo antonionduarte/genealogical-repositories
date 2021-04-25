@@ -489,7 +489,7 @@ let rec checkElem rep elem lst =
 	| [] -> true 
 	| x -> if (mem elem lst) then false
 				 (* else checkElem (fst (cut2 rep lst)) elem (all1 (fst (cut2 rep lst))) *)
-				 else checkElem rep (union visited lst) elem (all1 (fst (cut2 rep lst)))
+				 else checkElem rep elem (all1 (fst (cut2 rep lst)))
 ;;
 
 let rec ancestorsItself rep lst =
@@ -504,4 +504,4 @@ let twoParents rep =
 
 let validSemantic rep =
 	(twoParents rep) && (ancestorsItself rep (all1 rep))
-;;
+
