@@ -503,10 +503,5 @@ let twoParents rep =
 ;;
 
 let validSemantic rep =
-<<<<<<< HEAD
 	(ancestorsItself rep (all1 rep)) && (twoParents rep)
-
-=======
-	(twoParents rep) && (ancestorsItself rep (all1 rep))
 ;;
->>>>>>> 6bf751137837e67b39d913b4635fc5796214bb8d
