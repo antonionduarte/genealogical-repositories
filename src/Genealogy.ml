@@ -484,17 +484,17 @@ let validStructural rep =
 
 (* Function validSemantic *)
 
-let rec checkLoop elem curr rep = 
+let rec checkLoop sp curr rep = 
 	match curr with
 	| [] -> true
 	| x::xs -> let ps = parents rep [x] in
-					if mem elem ps then false
-					else checkLoop elem ps rep && checkLoop elem xs rep
+					if union sp ps <> [] then false
+					else checkLoop (sp @ ps) ps rep && checkLoop (sp @ ps) xs rep
 
 let rec toCheck elems rep =
 	match elems with
 	| [] -> true
-	| x::xs -> if (not (checkLoop (fst x) [fst x] rep)) || len (parents rep [fst x]) > 2 then false
+	| x::xs -> if (not (checkLoop [fst x] [fst x] rep)) || len (parents rep [fst x]) > 2 then false
 				else toCheck xs rep
 
-let rec validSemantic rep = toCheck rep rep;;
+let validSemantic rep = toCheck rep rep;;
