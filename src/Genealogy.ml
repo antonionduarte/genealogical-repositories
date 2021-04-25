@@ -488,7 +488,7 @@ let rec checkLoop sp curr rep =
 	match curr with
 	| [] -> true
 	| x::xs -> let ps = parents rep [x] in
-					if union sp ps <> [] then false
+					if inter sp ps <> [] then false
 					else checkLoop (sp @ ps) ps rep && checkLoop (sp @ ps) xs rep
 
 let rec toCheck elems rep =
@@ -498,3 +498,11 @@ let rec toCheck elems rep =
 				else toCheck xs rep
 
 let validSemantic rep = toCheck rep rep;;
+
+let example6 = [
+    ("g",[]);
+    ("a",["f";"g"]);
+    ("f",["a"])
+]
+
+g 
