@@ -498,11 +498,3 @@ let rec toCheck elems rep =
 				else toCheck xs rep
 
 let validSemantic rep = toCheck rep rep;;
-
-let example6 = [
-    ("g",[]);
-    ("a",["f";"g"]);
-    ("f",["a"])
-]
-
-g 
