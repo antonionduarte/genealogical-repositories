@@ -1,25 +1,12 @@
 (* Genealogy module body *)
 
 (* 
-Aluno 1: Goncalo Virginia 56773 
-Aluno 2: Antonio Duarte 58278 
+Student 1: Goncalo Virginia 56773 
+Student 2: Antonio Duarte 58278 
 
-Comment:
-
-?????????????????????????
-?????????????????????????
-?????????????????????????
-?????????????????????????
-?????????????????????????
-?????????????????????????
+All the methods in the project have been made.
 
 *)
-
-(*
-0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
-   100 columns
-*)
-
 
 (* Compilation - How to build this module (used by Mooshak))
          ocamlc -c Genealogy.mli Genealogy.ml
@@ -120,120 +107,6 @@ let example = [
    	("i", []);
     ("j", [])
 ]											
-
-let example2 = [
-    ("a",["d";"e"]);
-    ("b",["e";"f"]);
-    ("c",["g";"h"]);
-    ("d",["i"]);
-    ("e", ["i";"j";"d"]);
-    ("f", ["g";"m"]);
-    ("g", ["h";"m"]);
-    ("h", ["n"]);
-    ("i", ["j"]);
-    ("j", ["k"]);
-    ("k", []);
-    ("m", ["k"; "n"]);
-    ("n", [])
-]
-
-let example3 = [
-    ("a", ["e"]);
-    ("b", ["e"; "f"]);
-    ("c", ["f"; "g"]);
-    ("d", ["g"; "m"]);
-    ("e", ["j"; "h"]);
-    ("f", []);
-    ("g", ["i"; "l"]);
-    ("m", ["l"]);
-    ("j", []);
-    ("h", []);
-    ("i", []);
-    ("l", [])
-]
-
-let ultimateexample = [
-		("a",["g";"h"]);
-		("b",["h";"i"]);
-		("c",["i";"j";"k"]);
-		("d",["k";"l"]);
-		("e",["l";"m"]);
-		("f",["m";"n"]);
-		("g",["o";"p"]);
-		("h",["q";"r"]);
-		("i",["s";"t"]);
-		("j",["u"]);
-		("k",["v";"w"]);
-		("l",["x";"y"]);
-		("m",["y";"z"]);
-		("n",["z"]);
-		("o",["p";"2";"1"]);
-		("p",["q";"2"]);
-		("q",["3"]);
-		("r",["4";"5"]);
-		("s",["r";"6";"t";"4"]);
-		("t",["6";"u"]);
-		("u",["v";"8"]);
-		("v",[]);
-		("w",["9";"19"]);
-		("x",["10"]);
-		("y",["11";"x"]);
-		("z",["11"]);
-		("1",["12";"13"]);
-		("2",["1";"12";"13"]);
-		("3",["15"]);
-		("4",["3";"5";"16"]);
-		("5",["17"]);
-		("6",["7";"17"]);
-		("7",["18"]);
-		("8",["7";"19"]);
-		("9",["20"]);
-		("10",["9";"21"]);
-		("11",["10";"21"]);
-		("12",["14"]);
-		("13",["14"]);
-		("14",["15"]);
-		("15",["16"]);
-		("16",[]);
-		("17",[]);
-		("18",[]);
-		("19",["18";"20"]);
-		("20",["22"]);
-		("21",["22"]);
-		("22",[]);
-]
-
-let example5 = [
-    ("o",[]);
-    ("a",["d";"e"]);
-    ("d",["i"]);
-    ("e",["d";"i"]);
-    ("i",["l";"o"]);
-    ("l",["a"]);
-]    
-
-let example4 = [
-    ("a",["d";"e"]);
-    ("b",["e";"f"]);
-    ("c",["g";"h"]);
-    ("d",["i"]);
-    ("e", ["i";"j";"d"]);
-    ("loop trigger", []);
-    ("f", ["g";"m";"loop trigger"]);
-    ("g", ["h";"m"]);
-    ("h", ["n"]);
-    ("i", ["j"]);
-    ("j", ["k"]);
-    ("k", ["f"]);
-    ("m", ["k"; "n"]);
-    ("n", [])
-]
-
-let example6 = [
-    ("g",[]);
-    ("a",["f";"g"]);
-    ("f",["a"])
-]
 
 (* Basic repository functions - you can add more *)
 
@@ -366,7 +239,7 @@ and processChildren rep cl =
 
 (* Function - repOfDTree *)
 
-let rec concatChildren tl = 
+let rec concatChildren tl =  (* concatenates children list into a list *)
 	match tl with
 	| [] -> []
 	| DNil::_ -> []
@@ -399,27 +272,27 @@ let siblings rep lst =
 
 (* Function - siblingsInbreeding *)
 
-let rec cleanTuples lst =
+let rec cleanTuples lst = (* cleans repeated tuples *)
 	match lst with
 	| [] -> []
 	| (x, y)::xs -> if mem (y, x) xs then cleanTuples xs
 									else (x, y) :: (cleanTuples xs)
 ;;
 
-let rec joinPairs rep sib elem = 
+let rec joinPairs rep sib elem = (* joins an element with it's siblings in tuples *)
 	match sib with
 	| [] -> []
 	| x::xs -> if x = elem then joinPairs rep xs elem
 						 else (elem, x) :: (joinPairs rep xs elem)
 ;;
 
-let rec generatePairs rep possible_ib =
+let rec generatePairs rep possible_ib = (* generates all pairs of siblings in rep *)
 	match possible_ib with
 	| [] -> []
 	| x::xs -> (joinPairs rep (siblings rep [x]) x) @ (generatePairs rep xs)
 ;;
 
-let rec verifyIfBreeding rep pairs = 
+let rec verifyIfBreeding rep pairs = (* verifies if pairs of siblings have common children *)
 	match pairs with
 	| [] -> []
 	| (x, y)::xs -> if (inter (children rep [x]) (children rep [y])) <> []
@@ -443,19 +316,19 @@ let rec waveN rep n lst =
 
 (* Function - supremum *)
 
-let rec getAncestors rep elem =
+let rec getAncestors rep elem = (* gets all the ancestors of an element *)
 	diff (clean (aTreeToList (makeATree rep elem))) [elem]
 ;;
 
-let rec sharedAncestors rep lst = 
+let rec sharedAncestors rep lst =  (* gets a list of all shared ancestors of all elems in lst *)
 	match lst with
 	| [] -> []
 	| [x] -> getAncestors rep x 
 	| x::y::xs -> inter (getAncestors rep x) (sharedAncestors rep (y::xs)) 
 ;;
 
-let rec elemsAtDist rep lst dist =
-	filter (fun x -> (distToRoots rep x) = dist) lst
+let rec elemsAtDist rep lst dist = (* filters elements that are at dist from roots *)
+	filter (fun x -> (distToRoots rep x) = dist) lst 
 ;;
 
 let supremum rep s = 
@@ -463,15 +336,15 @@ let supremum rep s =
 		elemsAtDist rep sa (maxDistRoots rep sa)
 ;; 
 
-(* Function validStructural *)
+(* Function - validStructural *)
 
-let rec noDuplicates lst =
+let rec noDuplicates lst = (* verifies no duplicates condition in the first component of rep *)
 	match lst with 
 	| [] -> true
 	| x::xs -> (not (mem x xs)) && noDuplicates xs
 ;;
 
-let rec occursInFirst all lst =
+let rec occursInFirst all lst = (* verifies if all elements occur in first component of rep *)
 	match lst with
 	| [] -> true
 	| x::xs -> (mem x (all)) && occursInFirst all xs
@@ -482,24 +355,30 @@ let validStructural rep =
 		(noDuplicates (all_elems)) && (occursInFirst (all_elems) (all2 rep))
 ;; 
 
-(* Function validSemantic *)
+(* Function - validSemantic *)
 
-let rec checkElem rep visited lst = 
-	match lst with
-	| [] -> true 
-	| x -> if ((inter visited lst) = lst) then false
-				 (* else checkElem (fst (cut2 rep lst)) elem (all1 (fst (cut2 rep lst))) *)
-		   else checkElem rep (union visited lst) (parents rep lst)
+(*
+	This function was specifically difficult, because there are a few edge cases
+	where the verification for ancestors causes a looping recursion.
+	So we need to keep a list of all the already visited parents, in order to check
+	if we already visited it.
+*)
+
+let rec checkElem rep visited parent = (* checks if there is a loop for an element *)
+	if [parent] = [] then true
+	else if ((inter visited [parent]) <> []) then false
+	else for_all (fun x -> checkElem rep (parent::visited) x) (parents rep [parent])
 ;;
 
-let rec ancestorsItself rep lst =
+let rec ancestorsItself rep lst = (* verifies if an element is not ancestor of itself *)
 	match lst with
 	| [] -> true 
-	| x::xs -> (checkElem rep [] (parents rep [x])) && (ancestorsItself rep xs)
+	| x::xs -> (for_all (fun x -> checkElem rep [] x) (parents rep [x]))
+						 && ancestorsItself rep xs
 ;;
 
-let twoParents rep =
-	for_all (fun x -> (len (fst (cut2 rep [x])) <= 2)) (all1 rep)
+let twoParents rep = (* verifies if an element does not have more than two parents *)
+	for_all (fun x -> (len (parents rep [x])) <= 2) (all1 rep)
 ;;
 
 let validSemantic rep =
