@@ -486,7 +486,7 @@ let rec checkLoop elem curr rep =
 let rec toCheck elems rep =
 	match elems with
 	| [] -> true
-	| x::xs -> if (not (checkLoop (fst x) [(fst x)] rep)) || len (parents rep [fst x]) > 2 then false
+	| x::xs -> if (not (checkLoop (fst x) [fst x] rep)) || len (parents rep [fst x]) > 2 then false
 				else toCheck xs rep
 
 let rec validSemantic rep = toCheck rep rep;;
