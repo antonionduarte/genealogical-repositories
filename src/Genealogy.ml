@@ -382,5 +382,5 @@ let twoParents rep = (* verifies if an element does not have more than two paren
 ;;
 
 let validSemantic rep =
-	(twoParents rep) && (ancestorsItself rep (all1 rep))
+	(ancestorsItself rep (all1 rep)) && (twoParents rep)
 ;;
