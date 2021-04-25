@@ -484,18 +484,18 @@ let validStructural rep =
 
 (* Function validSemantic *)
 
-let rec checkElem rep elem lst = 
+let rec checkElem rep visited lst = 
 	match lst with
 	| [] -> true 
-	| x -> if (mem elem lst) then false
+	| x -> if ((inter visited (lst)) = lst) then false
 				 (* else checkElem (fst (cut2 rep lst)) elem (all1 (fst (cut2 rep lst))) *)
-				 else checkElem rep elem (all1 (fst (cut2 rep lst)))
+		   else checkElem rep (union visited lst) (parents rep [x])
 ;;
 
 let rec ancestorsItself rep lst =
 	match lst with
 	| [] -> true 
-	| x::xs -> (checkElem rep x (all1 (fst (cut2 rep [x])))) && (ancestorsItself rep xs)
+	| x::xs -> (checkElem rep [] (parents rep [x])) && (ancestorsItself rep xs)
 ;;
 
 let twoParents rep =
