@@ -361,7 +361,7 @@ let validStructural rep =
 	This function was specifically difficult, because there are a few edge cases
 	where the verification for ancestors causes a looping recursion.
 	So we need to keep a list of all the already visited parents, in order to check
-	if we already visited it.
+	if we already visited them.
 *)
 
 let rec checkElem rep visited parent = (* checks if there is a loop for an element *)
