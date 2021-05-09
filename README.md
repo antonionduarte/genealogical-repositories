@@ -8,11 +8,11 @@ and the list of known children of the specific individual.*
 
 # Structural Restrictions
 
-_Structural restrictions_
+_**Structural restrictions**_
  * There are no duplicates among the first components of the various pairs.
  * All the known individuals occur in the first component.
 
-_Semantic restrictions_
+_**Semantic restrictions**_
  * There are no loops in the structure, no one can be an ancestor of itself.
  * Each individual can have at most two parents.
 
