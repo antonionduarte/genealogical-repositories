@@ -5,13 +5,10 @@ Student 1: Goncalo Virginia 56773
 Student 2: Antonio Duarte 58278 
 
 All the methods in the project have been made.
-
 *)
 
 (* Compilation - How to build this module (used by Mooshak))
-         ocamlc -c Genealogy.mli Genealogy.ml
-*)
-
+         ocamlc -c Genealogy.mli Genealogy.ml *)
 
 (* Auxiliary Basic Functions - you can add more *)
 
