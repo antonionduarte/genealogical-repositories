@@ -23,16 +23,16 @@ all the known Ancestors of a specific element, and the former all the know Desce
 
 # Functions
 
-- height: Determines the height of a given repository.
-- makeATree: Makes an ancestor tree for a specific element, on a specific repository.
-- makeDTree: Makes a descendants tree for a specific element, on a specific repository.
-- repOfATree: Makes a repository data structure from an Ancestors Tree.
-- repOfDTree: Makes a repository data structure from a Descendants Tree.
-- descendantsN: Given a list of individuals, return all their descendants, "n" levels below.
-- siblings: Given a list of individuals, return all their children.
-- siblingsInbreeding: Find all pairs of siblings that have at least one child in common.
-- waveN: Collect all the individuals that are at a specified distance from an element in the given list.
-- merge: Merge two repositories.
-- supremum: Given a list of individuals, return all their common ancestors.
-- validStructural: Check the structural restrictions on a repository.
-- validSemantic: Check the semantic restriction on a repository.
+- **height**: Determines the height of a given repository.
+- **makeATree**: Makes an ancestor tree for a specific element, on a specific repository.
+- **makeDTree**: Makes a descendants tree for a specific element, on a specific repository.
+- **repOfATree**: Makes a repository data structure from an Ancestors Tree.
+- **repOfDTree**: Makes a repository data structure from a Descendants Tree.
+- **descendantsN**: Given a list of individuals, return all their descendants, "n" levels below.
+- **siblings**: Given a list of individuals, return all their children.
+- **siblingsInbreeding**: Find all pairs of siblings that have at least one child in common.
+- **waveN**: Collect all the individuals that are at a specified distance from an element in the given list.
+- **merge**: Merge two repositories.
+- **supremum**: Given a list of individuals, return all their common ancestors.
+- **validStructural**: Check the structural restrictions on a repository.
+- **validSemantic**: Check the semantic restriction on a repository.
