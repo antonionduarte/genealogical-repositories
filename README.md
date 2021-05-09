@@ -1,17 +1,17 @@
 # Genealogical Repositories
 
-*OCaml, fully functional programming project for the Languages and Programming Environments class*
+*OCaml, fully functional programming project for the Languages and Programming Environments class.*
 *In this project we developed functions to process and make interisting queries in a special type*
 *of data structure, called a Genealogical Gepository.*
 *A repository is a 	list of pairs, each consisting on the identification of an individual, 
-and the list of known children of the specific individual*
+and the list of known children of the specific individual.*
 
 # Structural Restrictions
 
-- Structural restrictions
+_Structural restrictions_
  * There are no duplicates among the first components of the various pairs.
  * All the known individuals occur in the first component.
-- Semantic restrictions
+_Semantic restrictions_
  * There are no loops in the structure, no one can be an ancestor of itself.
  * Each individual can have at most two parents.
 
